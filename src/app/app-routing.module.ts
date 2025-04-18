@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '', redirectTo: 'list', pathMatch: 'full'
   },
   {
-    path: 'list', component: ListComponent
+    path: 'list', loadChildren: () => import('./pages/list/list.module').then(m => m.ListModulePage)
   },
   {
     path: 'form', component: AddNewHotelsComponent
