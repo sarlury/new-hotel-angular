@@ -1,0 +1,79 @@
+<!-- hotel-table.component.html -->
+<div class="container mt-4">
+    <input
+      type="text"
+      class="form-control mb-3"
+      placeholder="Search hotel name or location"
+      [(ngModel)]="searchTerm"
+    />
+  
+    <div class="row btn-row">
+        <div class="col-md-4">
+            <button class="btn btn-primary" (click)="addNewHotel()">Add New Hotel</button>
+        </div>
+    </div>
+    <ng-container>
+      <table class="table table-hover table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th (click)="sortBy('name')">
+              Name
+              <span *ngIf="sortedColumn === 'name'">
+                {{ sortAsc ? '▲' : '▼' }}
+              </span>
+            </th>
+            <th (click)="sortBy('location')">
+              Location
+              <span *ngIf="sortedColumn === 'location'">
+                {{ sortAsc ? '▲' : '▼' }}
+              </span>
+            </th>
+            <th>Description</th>
+            <th (click)="sortBy('createdAt')">
+              Created At
+              <span *ngIf="sortedColumn === 'createdAt'">
+                {{ sortAsc ? '▲' : '▼' }}
+              </span>
+            </th>
+            <th (click)="sortBy('updatedAt')">
+              Updated At
+              <span *ngIf="sortedColumn === 'updatedAt'">
+                {{ sortAsc ? '▲' : '▼' }}
+              </span>
+            </th>
+            <th>
+                Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let hotel of hotelListData$ 
+                      | hotelFilterSortPaginate:searchTerm:sortedColumn:sortAsc:currentPage:itemsPerPage; let i = index;"
+          >
+            <td>{{ hotel.name }}</td>
+            <td>{{ hotel.location }}</td>
+            <td>{{ hotel.description }}</td>
+            <td>{{ hotel.createdAt | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ hotel.updatedAt | date: 'dd/MM/yyyy' }}</td>
+            <td>
+                <button class="btn btn-primary edit-btn" (click)="editHotel(hotel.id, hotel.name, hotel.location, hotel.description)">Edit</button>
+                <button class="btn btn-danger" (click)="onDeleteHotel(hotel.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- 🔽 ng-bootstrap Pagination -->
+      <ngb-pagination
+        [collectionSize]="hotels.length"
+        [(page)]="currentPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [boundaryLinks]="true"
+        [ellipses]="false"
+        class="justify-content-center"
+      ></ngb-pagination>
+    </ng-container>
+  </div>
+  
